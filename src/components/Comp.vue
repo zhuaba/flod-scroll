@@ -5,7 +5,6 @@
     @touchend="playerTouchEnd"
     class="container">
     <div class="card-wrapper">
-
       <div class="card-item"
         v-for="(item, index) in cardArrs"
         :key="index"
@@ -13,7 +12,7 @@
           { zIndex: item.zIndex },
           { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` },
           { transition: `transform ${item.transitionTime}s ease 0s` },
-          { opacity: item.scale === 1 ? 1 : item.scale}
+          { opacity: item.opacity}
         ]">
 
         <div class="item-inner"></div>
@@ -23,6 +22,8 @@
 </template>
 
 <script>
+import { move_scale } from '../assets/js/funcs.js'
+
 export default {
   name: 'Comp',
   data() {
@@ -32,18 +33,21 @@ export default {
           zIndex: 1,
           scale: 1,
           translateX: 10,
+          opacity: 1,
           transitionTime: 0
         },
         {
           zIndex: 2,
           scale: 1,
           translateX: 275,
+          opacity: 1,
           transitionTime: 0
         },
         {
           zIndex: 3,
           scale: 1,
           translateX: 540,
+          opacity: 1,
           transitionTime: 0
         },
       ],
@@ -74,6 +78,8 @@ export default {
             this.cardArrs[2].translateX = 540 + this.disX * 0.2
             break
           case 1:
+            this.cardArrs[0].scale = move_scale(this.disX)
+            this.cardArrs[0].opacity += Math.abs(this.disX / 375) * 0.6
             this.cardArrs[1].translateX = 15 + this.disX
             this.cardArrs[2].translateX = 285 + this.disX
             break
@@ -88,7 +94,9 @@ export default {
       if (this.disX < 0) {
         switch(this.currentIndex) {
           case 0:
-            this.cardArrs[0].scale = 1 - Math.abs(this.disX / 500) * 0.1
+            this.cardArrs[0].scale = move_scale(this.disX)
+            // this.cardArrs[0].scale = 1 - Math.abs(this.disX / 375) * 0.1
+            this.cardArrs[0].opacity = 1 - Math.abs(this.disX / 375) * 0.6
             this.cardArrs[1].translateX = 275 + this.disX
             this.cardArrs[2].translateX = 540 + this.disX
             break
@@ -122,6 +130,8 @@ export default {
     slideLeft() {
       switch(this.currentIndex) {
         case 0:
+          this.cardArrs[0].translateX = 5
+          this.cardArrs[0].opacity = 0.4
           this.cardArrs[1].translateX = 15
           this.cardArrs[2].translateX = 285
           break
@@ -141,6 +151,7 @@ export default {
         case 0:
         case 1:
           this.cardArrs[0].translateX = 10
+          this.cardArrs[0].scale = 1
           this.cardArrs[1].translateX = 275
           this.cardArrs[2].translateX = 540
           break
@@ -208,5 +219,7 @@ html, body { margin: 0; padding: 0; }
   box-shadow: 0 4px 12px 1px rgba(57,57,57,.14);
   position: relative;
   border-radius: 12px;
+  background-image: url('../assets/img/11.jpg');
+  background-size: cover;
 }
 </style>
