@@ -1,20 +1,21 @@
 <template>
   <div
+    class="fold-scroll"
     @touchstart="playerTouchStart"
     @touchmove="playerTouchMove"
     @touchend="playerTouchEnd"
-    class="container">
-    <div class="card-wrapper">
-      <div class="card-item"
+  >
+    <div class="fold-scroll-wrapper">
+      <div
         v-for="(item, index) in cardArrs"
+        class="fold-scroll-item"
         :key="index"
         :style="[
           { zIndex: item.zIndex },
           { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` },
-          { transition: `transform ${item.transitionTime}s ease 0s` },
           { opacity: item.opacity}
-        ]">
-
+        ]"
+      >
         <div class="item-inner"></div>
       </div>
     </div>
@@ -34,21 +35,18 @@ export default {
           scale: 1,
           translateX: 10,
           opacity: 1,
-          transitionTime: 0
         },
         {
           zIndex: 2,
           scale: 1,
           translateX: 275,
           opacity: 1,
-          transitionTime: 0
         },
         {
           zIndex: 3,
           scale: 1,
           translateX: 540,
           opacity: 1,
-          transitionTime: 0
         },
       ],
       startX: 0, // 触摸位置
@@ -93,15 +91,11 @@ export default {
         }
       }
 
-
-
-      
       // 左滑动
       if (this.disX < 0) {
         switch(this.currentIndex) {
           case 0:
             this.cardArrs[0].scale = move_scale(this.disX)
-            // this.cardArrs[0].scale = 1 - Math.abs(this.disX / 375) * 0.1
             this.cardArrs[0].opacity = move_opacity(this.disX)
             this.cardArrs[1].translateX = 275 + this.disX
             this.cardArrs[2].translateX = 540 + this.disX
@@ -136,6 +130,7 @@ export default {
       }
       this.slideLeft()
     },
+    // 往左滑动一次卡片
     slideLeft() {
       switch(this.currentIndex) {
         case 0:
@@ -155,6 +150,7 @@ export default {
       }
       this.currentIndex < 2 && this.currentIndex++
     },
+    // 往右滑动一次卡片
     slideRight() {
       switch(this.currentIndex) {
         case 0:
@@ -180,6 +176,7 @@ export default {
       }
       this.currentIndex > 0 && this.currentIndex--
     },
+    // 滑动距离若不超过阈值则复位
     reback() {
       switch(this.currentIndex) {
         case 0:
@@ -211,15 +208,18 @@ export default {
 
 <style>
 html, body { margin: 0; padding: 0; }
-.container {
-  height: 300px;
+
+.fold-scroll {
   position: relative;
+  height: 300px;
   overflow: hidden;
 }
-.card-wrapper {
+
+.fold-scroll-wrapper {
   position: relative;
 }
-.card-item {
+
+.fold-scroll-item {
   position: absolute;
   width: 260px;
   height: 130px;
@@ -227,14 +227,15 @@ html, body { margin: 0; padding: 0; }
   transform-origin: left;
   will-change: transform;
 }
+
 .item-inner {
-  background-color: #e0e0e0;
+  position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: 0 4px 12px 1px rgba(57,57,57,.14);
-  position: relative;
   border-radius: 12px;
-  background-image: url('../assets/img/11.jpg');
+  background-image: url('../assets/img/leimu.jpg');
+  background-color: #e0e0e0;
   background-size: cover;
+  box-shadow: 0 4px 12px 1px rgba(97, 97 ,97 , .14);
 }
 </style>
