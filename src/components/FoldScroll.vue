@@ -75,7 +75,7 @@ export default {
           case 1:
             this.cardArrs[0].scale = move_scale(this.disX)
             this.cardArrs[0].opacity = move_opacity(this.disX)
-            this.cardArrs[1].translateX = 15 + this.disX
+            this.cardArrs[1].translateX = 10 + this.disX
             this.cardArrs[2].translateX = 275 + this.disX
             break
           case 2:
@@ -105,9 +105,9 @@ export default {
             this.cardArrs[2].translateX = 275 + this.disX
             break
           case 2:
-            this.cardArrs[0].translateX = 10 + this.disX * 0.2
-            this.cardArrs[1].translateX = 15 + this.disX * 0.2
-            this.cardArrs[2].translateX = 20 + this.disX * 0.2
+            this.cardArrs[0].translateX = 5 + this.disX * 0.2
+            this.cardArrs[1].translateX = 10 + this.disX * 0.2
+            this.cardArrs[2].translateX = 15 + this.disX * 0.2
             break
           default:
             break
