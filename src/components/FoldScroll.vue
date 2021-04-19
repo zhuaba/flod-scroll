@@ -5,19 +5,17 @@
     @touchmove="playerTouchMove"
     @touchend="playerTouchEnd"
   >
-    <div class="fold-scroll-wrapper">
-      <div
-        v-for="(item, index) in cardArrs"
-        class="fold-scroll-item"
-        :key="index"
-        :style="[
-          { zIndex: item.zIndex },
-          { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` },
-          { opacity: item.opacity}
-        ]"
-      >
-        <div class="item-inner"></div>
-      </div>
+    <div
+      v-for="(item, index) in cardArrs"
+      class="fold-scroll-item"
+      :key="index"
+      :style="[
+        { zIndex: item.zIndex },
+        { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` },
+        { opacity: item.opacity}
+      ]"
+    >
+      <slot :name="index"></slot>
     </div>
   </div>
 </template>
@@ -26,7 +24,7 @@
 import { move_scale, move_opacity } from '../assets/js/funcs.js'
 
 export default {
-  name: 'Comp',
+  name: 'FoldScroll',
   data() {
     return {
       cardArrs: [
@@ -215,10 +213,6 @@ html, body { margin: 0; padding: 0; }
   overflow: hidden;
 }
 
-.fold-scroll-wrapper {
-  position: relative;
-}
-
 .fold-scroll-item {
   position: absolute;
   width: 260px;
@@ -228,14 +222,4 @@ html, body { margin: 0; padding: 0; }
   will-change: transform;
 }
 
-.item-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  background-image: url('../assets/img/leimu.jpg');
-  background-color: #e0e0e0;
-  background-size: cover;
-  box-shadow: 0 4px 12px 1px rgba(97, 97 ,97 , .14);
-}
 </style>
