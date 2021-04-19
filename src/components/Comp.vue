@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { move_scale } from '../assets/js/funcs.js'
+import { move_scale, move_opacity } from '../assets/js/funcs.js'
 
 export default {
   name: 'Comp',
@@ -74,34 +74,43 @@ export default {
           case 0:
             this.cardArrs[0].translateX = 10 + this.disX * 0.2
             this.cardArrs[1].translateX = 275 + this.disX * 0.2
-            // this.cardArrs[1].scale = 0.9
             this.cardArrs[2].translateX = 540 + this.disX * 0.2
             break
           case 1:
             this.cardArrs[0].scale = move_scale(this.disX)
-            this.cardArrs[0].opacity += Math.abs(this.disX / 375) * 0.6
+            this.cardArrs[0].opacity = move_opacity(this.disX)
             this.cardArrs[1].translateX = 15 + this.disX
-            this.cardArrs[2].translateX = 285 + this.disX
+            this.cardArrs[2].translateX = 275 + this.disX
             break
           case 2:
-            this.cardArrs[2].translateX = 20 + this.disX
+            this.cardArrs[0].scale = move_scale(this.disX, 0.85, this.cardArrs[0].scale)
+            this.cardArrs[1].scale = move_scale(this.disX)
+            this.cardArrs[1].opacity = move_opacity(this.disX)
+            this.cardArrs[2].translateX = 15 + this.disX
             break
           default:
             break
         }
       }
+
+
+
+      
       // 左滑动
       if (this.disX < 0) {
         switch(this.currentIndex) {
           case 0:
             this.cardArrs[0].scale = move_scale(this.disX)
             // this.cardArrs[0].scale = 1 - Math.abs(this.disX / 375) * 0.1
-            this.cardArrs[0].opacity = 1 - Math.abs(this.disX / 375) * 0.6
+            this.cardArrs[0].opacity = move_opacity(this.disX)
             this.cardArrs[1].translateX = 275 + this.disX
             this.cardArrs[2].translateX = 540 + this.disX
             break
           case 1:
-            this.cardArrs[2].translateX = 285 + this.disX
+            this.cardArrs[0].scale = move_scale(this.disX, 0.85, 0.9)
+            this.cardArrs[1].scale = move_scale(this.disX)
+            this.cardArrs[1].opacity = move_opacity(this.disX)
+            this.cardArrs[2].translateX = 275 + this.disX
             break
           case 2:
             this.cardArrs[0].translateX = 10 + this.disX * 0.2
@@ -132,11 +141,11 @@ export default {
         case 0:
           this.cardArrs[0].translateX = 5
           this.cardArrs[0].opacity = 0.4
-          this.cardArrs[1].translateX = 15
-          this.cardArrs[2].translateX = 285
+          this.cardArrs[1].translateX = 10
+          this.cardArrs[2].translateX = 275
           break
         case 1:
-          this.cardArrs[2].translateX = 20
+          this.cardArrs[2].translateX = 15
           break
         case 2:
           this.reback()
@@ -152,13 +161,19 @@ export default {
         case 1:
           this.cardArrs[0].translateX = 10
           this.cardArrs[0].scale = 1
+          this.cardArrs[0].opacity = 1
           this.cardArrs[1].translateX = 275
+          this.cardArrs[1].opacity = 1
+          this.cardArrs[1].scale = 1
           this.cardArrs[2].translateX = 540
           break
         case 2:
-          this.cardArrs[0].translateX = 10
-          this.cardArrs[1].translateX = 15
-          this.cardArrs[2].translateX = 280
+          this.cardArrs[0].translateX = 5
+          this.cardArrs[0].scale = 0.9
+          this.cardArrs[1].translateX = 10
+          this.cardArrs[1].scale = 1
+          this.cardArrs[1].opacity = 1
+          this.cardArrs[2].translateX = 275
           break
         default:
           break
@@ -169,21 +184,22 @@ export default {
       switch(this.currentIndex) {
         case 0:
           this.cardArrs[0].translateX = 10
+          this.cardArrs[0].opacity = 1
+          this.cardArrs[0].scale = 1
           this.cardArrs[1].translateX = 275
           this.cardArrs[2].translateX = 540
           break
         case 1:
-          this.cardArrs[0].translateX = 10
-          this.cardArrs[0].scale = 0.95
-          this.cardArrs[1].translateX = 15
-          this.cardArrs[2].translateX = 280
+          this.cardArrs[0].translateX = 5
+          this.cardArrs[0].opacity = 0.4
+          this.cardArrs[1].translateX = 10
+          this.cardArrs[1].scale = 1
+          this.cardArrs[2].translateX = 275
           break
         case 2:
-          this.cardArrs[0].translateX = 10
-          this.cardArrs[0].scale = 0.9
-          this.cardArrs[1].translateX = 15
-          this.cardArrs[1].scale = 0.95
-          this.cardArrs[2].translateX = 20
+          this.cardArrs[0].translateX = 5
+          this.cardArrs[1].translateX = 10
+          this.cardArrs[2].translateX = 15
           break
         default:
           break
@@ -202,14 +218,13 @@ html, body { margin: 0; padding: 0; }
 }
 .card-wrapper {
   position: relative;
-  width: calc(65vw + 11px);
 }
 .card-item {
   position: absolute;
-  margin: 5px;
   width: 260px;
   height: 130px;
   border-radius: 5px;
+  transform-origin: left;
   will-change: transform;
 }
 .item-inner {
