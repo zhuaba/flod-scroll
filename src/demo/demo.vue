@@ -1,8 +1,9 @@
 <template>
   <div class="demo">
-    <FoldScroll>
+    <FoldScroll :cardNum="10" :cardWidth="260">
       <template v-for="(item, idx) in cardList" :slot="idx">
-        <div class="demo-item" :key="idx" :style="{ backgroundImage: `url(${require('../assets/img/leimu.jpg')})` }">
+        <!-- <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx), backgroundImage: `url(${require('../assets/img/leimu.jpg')})` }"> -->
+        <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx) }">
         </div>
       </template>
     </FoldScroll>
@@ -19,7 +20,13 @@ export default {
   },
   data() {
     return {
-      cardList: [{}, {}, {}]
+      cardList: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+    }
+  },
+  methods: {
+    getColor(idx) {
+      let color = ['#e0e0e0', '#ffe0e0', '#e0ffe0', '#e0e0ff']
+      return color[idx] ?? this.getColor(idx - 4)
     }
   }
 }
@@ -31,7 +38,6 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  background-color: #e0e0e0;
   background-size: cover;
   box-shadow: 0 4px 12px 1px rgba(97, 97 ,97 , .14);
 }
