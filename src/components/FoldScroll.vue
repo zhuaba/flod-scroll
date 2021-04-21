@@ -51,7 +51,6 @@ export default {
       disX: 0, // 移动距离
       slideDistance: Math.floor(this.cardWidth * 2 / 5), // 滑动触发切换还是回位的阀值
       currentIndex: 0, // 当前主视口的卡片 index
-      savePosition: {}
     }
   },
   methods: {
@@ -105,7 +104,14 @@ export default {
         this.cardArrs[this.currentIndex -1].scale = move_scale(this.disX, 0.85, 0.9)
         this.cardArrs[this.currentIndex].scale = move_scale(this.disX)
         this.cardArrs[this.currentIndex].opacity = move_opacity(this.disX)
-        this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5) + this.disX
+        for (let i = this.currentIndex + 1; i < this.cardNum; i++) {
+          this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) * (i - this.currentIndex) + this.disX
+        }
+        // this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5) + this.disX
+
+        // if (this.cardNum > this.currentIndex + 2) {
+        //   this.cardArrs[this.currentIndex + 2].translateX = 10 + (this.cardWidth + 5) * 2 + this.disX
+        // }
         // this.cardNum > (this.currentIndex + 2) && this.moveRestCards(this.currentIndex + 2, this.disX)
       }
     },
@@ -130,12 +136,13 @@ export default {
         this.cardArrs[0].opacity = 0.4
         this.cardArrs[1].translateX = 10
         this.cardArrs[2].translateX = 10 + (this.cardWidth + 5)
-        this.cardNum > 3 && this.slideRestCards(3, -1)
+        this.cardNum > 3 && this.slideRestCards(3)
       } else if (this.currentIndex === this.cardNum - 1) {
         this.reback()
       } else {
-        this.cardArrs[this.currentIndex + 1].translateX = 15
-        this.cardNum > (this.currentIndex + 2) && this.slideRestCards(this.currentIndex + 2, -1)
+        this.cardArrs[this.currentIndex + 1].translateX = 10
+        this.cardArrs[this.currentIndex + 2].translateX = 10 + this.cardWidth + 5
+        this.cardNum > (this.currentIndex + 3) && this.slideRestCards(this.currentIndex + 3)
       }
       this.currentIndex < this.cardNum - 1 && this.currentIndex++
     },
@@ -149,7 +156,11 @@ export default {
         this.cardArrs[1].opacity = 1
         this.cardArrs[1].scale = 1
         this.cardArrs[2].translateX = 10 + (this.cardWidth + 5) * 2
-        this.currentIndex === 1 && this.slideRestCards(3, 1)
+        if (this.currentIndex === 1) {
+          for (let i = 2; i < this.cardNum; i ++) {
+            this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) + (this.cardWidth + 5) * (i - this.currentIndex)
+          }
+        }
       } else {
         this.cardArrs[this.currentIndex - 2].translateX = 5
         this.cardArrs[this.currentIndex - 2].scale = 0.9
@@ -187,9 +198,9 @@ export default {
       this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5)
     },
     // 每拖动改变一张卡片的位置，移动后面剩余的卡片的位置
-    slideRestCards(idx, direction) {
+    slideRestCards(idx) {
       for (let i = idx; i < this.cardNum; i++) {
-        this.cardArrs[i].translateX += (this.cardWidth + 5) * direction
+        this.cardArrs[i].translateX = 15 + (this.cardWidth + 5) * (i - idx + 2)
       }
     },
     // 实时改变后续卡片的位置
