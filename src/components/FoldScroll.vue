@@ -40,86 +40,88 @@ export default {
     cardWidth: {
       type: Number,
       default: 260
+    },
+    slideDistance: {
+      type: Number,
     }
   },
   data() {
     return {
       cardArrs: formatCardData(this.cardNum, this.cardWidth),
-      startX: 0, // 触摸位置
-      endX: 0, // 结束位置
-      moveX: 0, // 滑动时的位置
-      disX: 0, // 移动距离
-      slideDistance: Math.floor(this.cardWidth * 2 / 5), // 滑动触发切换还是回位的阀值
-      currentIndex: 0, // 当前主视口的卡片 index
+      touchStartX: 0,
+      touchLeaveX: 0,
+      // 当前主视口的卡片 index
+      currentIndex: 0,
+    }
+  },
+  computed: {
+    slideDis () {
+      return this.slideDistance ?? Math.floor(this.cardWidth * 2 / 5)
     }
   },
   methods: {
     playerTouchStart(e) {
-      this.startX = e.changedTouches[0].clientX
+      this.touchStartX = e.changedTouches[0].clientX
       this.savePosition = this.cardArrs.slice(this.currentIndex + 1)
-      console.log('滑动起点---->', this.startX)
     },
     playerTouchMove(e) {
-      this.moveX = e.changedTouches[0].clientX
-      this.disX = this.moveX - this.startX
+      // 手指位置的X坐标
+      const currentPositionX = e.changedTouches[0].clientX
+      // 实时移动距离
+      const moveValue = currentPositionX - this.touchStartX
 
       // 右滑动
-      if (this.disX > 0) {
+      if (moveValue > 0) {
+        // 右滑到临界值的时候会触发事件
+        moveValue >= this.slideDis && this.triggerThreshold(this.currentIndex, 1)
         // 到边缘的时候营造出滑动阻尼的体验，阻尼系数 0.2
         if (this.currentIndex === 0) {
-          this.cardArrs[0].translateX = 10 + this.disX * 0.2
-          this.cardArrs[1].translateX = 10 + (this.cardWidth + 5) + this.disX * 0.2
-          this.cardArrs[2].translateX = 15 + (this.cardWidth + 5) * 2 + this.disX * 0.2
+          this.cardArrs[0].translateX = 10 + moveValue * 0.2
+          this.cardArrs[1].translateX = 10 + (this.cardWidth + 5) + moveValue * 0.2
+          this.cardArrs[2].translateX = 15 + (this.cardWidth + 5) * 2 + moveValue * 0.2
           return
         }
         if (this.currentIndex === this.cardNum - 1) {
-          this.cardArrs[this.currentIndex - 2].scale = move_scale(this.disX, 0.85, this.cardArrs[this.currentIndex - 2].scale)
-          this.cardArrs[this.currentIndex - 1].scale = move_scale(this.disX)
-          this.cardArrs[this.currentIndex - 1].opacity = move_opacity(this.disX)
-          this.cardArrs[this.currentIndex].translateX = 15 + this.disX
+          this.cardArrs[this.currentIndex - 2].scale = move_scale(moveValue, 0.85, this.cardArrs[this.currentIndex - 2].scale)
+          this.cardArrs[this.currentIndex - 1].scale = move_scale(moveValue)
+          this.cardArrs[this.currentIndex - 1].opacity = move_opacity(moveValue)
+          this.cardArrs[this.currentIndex].translateX = 15 + moveValue
           return
         }
-        this.cardArrs[this.currentIndex -1].scale = move_scale(this.disX)
-        this.cardArrs[this.currentIndex - 1].opacity = move_opacity(this.disX)
-        this.cardArrs[this.currentIndex].translateX = 10 + this.disX
-        this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5) + this.disX
+        this.cardArrs[this.currentIndex -1].scale = move_scale(moveValue)
+        this.cardArrs[this.currentIndex - 1].opacity = move_opacity(moveValue)
+        this.cardArrs[this.currentIndex].translateX = 10 + moveValue
+        this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5) + moveValue
       }
 
       // 左滑动
-      if (this.disX < 0) {
+      if (moveValue < 0) {
+        // 左滑到临界值的时候会触发事件
+        Math.abs(moveValue) >= this.slideDis && this.triggerThreshold(this.currentIndex, -1)
         if (this.currentIndex === 0) {
-          this.cardArrs[0].scale = move_scale(this.disX)
-          this.cardArrs[0].opacity = move_opacity(this.disX)
-          this.cardArrs[1].translateX = 10 + (this.cardWidth + 5) + this.disX
-          this.cardArrs[2].translateX = 10 + (this.cardWidth + 5) * 2 + this.disX
+          this.cardArrs[0].scale = move_scale(moveValue)
+          this.cardArrs[0].opacity = move_opacity(moveValue)
+          this.cardArrs[1].translateX = 10 + (this.cardWidth + 5) + moveValue
+          this.cardArrs[2].translateX = 10 + (this.cardWidth + 5) * 2 + moveValue
           return
         }
         // 到边缘的时候营造出滑动阻尼的体验，阻尼系数 0.2
         if (this.currentIndex === this.cardNum - 1) {
-          this.cardArrs[this.currentIndex - 2].translateX = 5 + this.disX * 0.2
-          this.cardArrs[this.currentIndex - 1].translateX = 10 + this.disX * 0.2
-          this.cardArrs[this.currentIndex].translateX = 15 + this.disX * 0.2
+          this.cardArrs[this.currentIndex - 2].translateX = 5 + moveValue * 0.2
+          this.cardArrs[this.currentIndex - 1].translateX = 10 + moveValue * 0.2
+          this.cardArrs[this.currentIndex].translateX = 15 + moveValue * 0.2
           return
         }
-        this.cardArrs[this.currentIndex -1].scale = move_scale(this.disX, 0.85, 0.9)
-        this.cardArrs[this.currentIndex].scale = move_scale(this.disX)
-        this.cardArrs[this.currentIndex].opacity = move_opacity(this.disX)
-        for (let i = this.currentIndex + 1; i < this.cardNum; i++) {
-          this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) * (i - this.currentIndex) + this.disX
-        }
-        // this.cardArrs[this.currentIndex + 1].translateX = 10 + (this.cardWidth + 5) + this.disX
-
-        // if (this.cardNum > this.currentIndex + 2) {
-        //   this.cardArrs[this.currentIndex + 2].translateX = 10 + (this.cardWidth + 5) * 2 + this.disX
-        // }
-        // this.cardNum > (this.currentIndex + 2) && this.moveRestCards(this.currentIndex + 2, this.disX)
+        this.cardArrs[this.currentIndex -1].scale = move_scale(moveValue, 0.85, 0.9)
+        this.cardArrs[this.currentIndex].scale = move_scale(moveValue)
+        this.cardArrs[this.currentIndex].opacity = move_opacity(moveValue)
+        this.moveRestCards(this.currentIndex + 1, moveValue)
       }
     },
     playerTouchEnd(e) {
-      this.endX = e.changedTouches[0].clientX
-      const distance = e.changedTouches[0].clientX - this.startX
-      console.log('滑动距离--->', distance)
-      if (Math.abs(distance) < this.slideDistance) {
+      this.touchLeaveX = e.changedTouches[0].clientX
+      const distance = e.changedTouches[0].clientX - this.touchStartX
+      if (Math.abs(distance) < this.slideDis) {
         this.reback()
         return
       }
@@ -141,9 +143,10 @@ export default {
         this.reback()
       } else {
         this.cardArrs[this.currentIndex + 1].translateX = 10
-        this.cardArrs[this.currentIndex + 2].translateX = 10 + this.cardWidth + 5
+        if (this.cardNum > (this.currentIndex + 2)) { this.cardArrs[this.currentIndex + 2].translateX = 10 + this.cardWidth + 5 }
         this.cardNum > (this.currentIndex + 3) && this.slideRestCards(this.currentIndex + 3)
       }
+      this.$emit('triggerSlideLeft', this.currentIndex)
       this.currentIndex < this.cardNum - 1 && this.currentIndex++
     },
     // 往右滑动一次卡片
@@ -156,11 +159,7 @@ export default {
         this.cardArrs[1].opacity = 1
         this.cardArrs[1].scale = 1
         this.cardArrs[2].translateX = 10 + (this.cardWidth + 5) * 2
-        if (this.currentIndex === 1) {
-          for (let i = 2; i < this.cardNum; i ++) {
-            this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) + (this.cardWidth + 5) * (i - this.currentIndex)
-          }
-        }
+        this.currentIndex === 1 && this.slideRestCards(2)
       } else {
         this.cardArrs[this.currentIndex - 2].translateX = 5
         this.cardArrs[this.currentIndex - 2].scale = 0.9
@@ -168,11 +167,9 @@ export default {
         this.cardArrs[this.currentIndex - 1].scale = 1
         this.cardArrs[this.currentIndex - 1].opacity = 1
         this.cardArrs[this.currentIndex].translateX = 10 + (this.cardWidth + 5)
-        // 不能使用 this.slideRestCards ，获取到的translateX会有问题，只能手动计算
-        for (let i = this.currentIndex + 1; i < this.cardNum; i ++) {
-          this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) + (this.cardWidth + 5) * (i - this.currentIndex)
-        }
+        this.cardNum > (this.currentIndex + 1) && this.slideRestCards(this.currentIndex + 1)
       }
+      this.$emit('triggerSlideRight', this.currentIndex)
       this.currentIndex > 0 && this.currentIndex--
     },
     // 滑动距离若不超过阈值则复位
@@ -206,8 +203,15 @@ export default {
     // 实时改变后续卡片的位置
     moveRestCards(idx, distance) {
       for (let i = idx; i < this.cardNum; i++) {
-        this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) * i + distance
+        this.cardArrs[i].translateX = 10 + (this.cardWidth + 5) * (i - idx + 1) + distance
       }
+    },
+    triggerThreshold(idx, direction) {
+      // direction: -1 表示左滑动， 1 表示右滑动
+      this.$emit('triggerThreshold', {
+        currentIndex: idx,
+        direction: direction
+      })
     }
   }
 }
@@ -229,5 +233,4 @@ html, body { margin: 0; padding: 0; }
   transform-origin: left;
   will-change: transform;
 }
-
 </style>

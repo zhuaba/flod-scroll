@@ -2,7 +2,6 @@
   <div class="demo">
     <FoldScroll :cardNum="5" :cardWidth="260">
       <template v-for="(item, idx) in cardList" :slot="idx">
-        <!-- <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx), backgroundImage: `url(${require('../assets/img/leimu.jpg')})` }"> -->
         <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx) }">
         </div>
       </template>
