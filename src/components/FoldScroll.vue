@@ -35,11 +35,11 @@ export default {
   props: {
     cardNum: {
       type: Number,
-      default: 3
+      default: 3,
     },
     cardWidth: {
       type: Number,
-      default: 260
+      default: 260,
     },
     slideDistance: {
       type: Number,

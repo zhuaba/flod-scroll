@@ -1,7 +1,6 @@
 # fold-scroll
 基于vue2.x的H5横向折叠滑动组件样式实现
-* 支持滑动动态伸缩
-* 支持滑动改变底层卡片透明度
+* 滑动过程伴随伸缩和透明度变化
 * 支持阈值内滑动复位
 
 
@@ -14,13 +13,12 @@
 </figure>
 
 
-## Project setup and start
-```
-yarn install
-yarn serve
+### Usage Example
+In your project, you can import fold-scroll package with npm or yarn
+```js
+npm i fold-scroll / yarn add fold-scroll
 ```
 
-### Usage
 ```vue
 <FoldScroll :cardNum="5" :cardWidth="260" :slideDistance="100">
   <template v-for="(item, idx) in cardList" :slot="idx">
@@ -30,9 +28,12 @@ yarn serve
 </FoldScroll>
 
 <script>
-import FoldScroll from '~/FoldScroll.vue'
+import FoldScroll from 'fold-scroll'
 
 export default {
+  components: {
+    FoldScroll,
+  },
   data() {
     return {
       cardList: [{}, {}, {}, {}, {}]
