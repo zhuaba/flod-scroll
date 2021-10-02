@@ -3,13 +3,12 @@
 * 滑动过程伴随伸缩和透明度变化
 * 支持阈值内滑动复位
 
+### intro
+fold-scroll 提供了一个折叠滑动的容器，可以通过暴露出来的 slot（#0～n）进行内容填充展示
 
-<video id="video" controls="" preload="none" poster="./public/pic1.png">
-  <source id="mp4" src="./public/fold-demo.mp4" type="video/mp4">
-</video>
 
 <figure class="third">
-  <img src="./public/fold-demo2.gif" width="370"/>
+  <img src="./public/leimu.gif" width="370"/>
 </figure>
 
 
@@ -20,9 +19,14 @@ npm i fold-scroll / yarn add fold-scroll
 ```
 
 ```vue
-<FoldScroll :cardNum="5" :cardWidth="260" :slideDistance="100">
+<FoldScroll :cardNum="5" :cardWidth="260" :slideThreshold="100">
+  <!-- 在不同的 slot 中放入你想展示的内容 -->
   <template v-for="(item, idx) in cardList" :slot="idx">
-    <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx) }">
+    <div
+      class="demo-item"
+      :key="idx"
+      :style="{ backgroundColor: getColor(idx) }"
+    >
     </div>
   </template>
 </FoldScroll>
@@ -49,13 +53,14 @@ export default {
 </script>
 ```
 
+
 ### Props
 
 | 参数 | 说明 | 类型 | 默认值 | 必选 | 可选值 |
 | --- | --- | --- | --- | --- | --- |
 | cardNum | 传入的卡片数量 | number | true | N | - |
 | cardWidth | 卡片的宽度 | number | false | N | 建议大于屏幕宽度的一半 |
-| slideDistance | 滑动阈值（超过该距离则折叠滑动，不超过则复原） | number | false | N | - |
+| slideThreshold | 滑动阈值（超过该距离阈值则进行折叠，不超过则复原） | number | false | N | - |
 
 ### Events
 
