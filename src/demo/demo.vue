@@ -39,5 +39,6 @@ export default {
   border-radius: 12px;
   background-size: cover;
   box-shadow: 0 4px 12px 1px rgba(97, 97 ,97 , .14);
+  background-image: url('../assets/img/leimu.jpg');
 }
 </style>
