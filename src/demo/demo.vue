@@ -2,7 +2,10 @@
   <div class="demo">
     <FoldScroll :cardNum="5" :cardWidth="260">
       <template v-for="(item, idx) in cardList" :slot="idx">
-        <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx) }">
+        <div
+          class="demo-item"
+          :key="idx"
+          :style="{ backgroundColor: getColor(idx) }">
         </div>
       </template>
     </FoldScroll>
@@ -39,5 +42,6 @@ export default {
   border-radius: 12px;
   background-size: cover;
   box-shadow: 0 4px 12px 1px rgba(97, 97 ,97 , .14);
+  background-image: url('../assets/img/leimu.jpg');
 }
 </style>

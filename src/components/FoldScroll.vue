@@ -6,17 +6,21 @@
     @touchend="playerTouchEnd"
   >
     <div
+      class="fold-scroll__item"
       v-for="(item, index) in cardArrs"
-      class="fold-scroll-item"
       :key="item.zIndex"
       :style="[
         { zIndex: item.zIndex },
-        { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` },
-        { opacity: item.opacity},
-        { width: cardWidth + 'px' }
+        { width: cardWidth + 'px' },
+        { transform: `scale(${item.scale}) translate3d(${item.translateX}px, 0px, 0px)` }
       ]"
     >
-      <slot :name="index"></slot>
+      <div
+        class="fold-scroll__item--opacity"
+        :style="{ 'opacity': item.opacity}"
+      >
+        <slot :name="index"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -35,13 +39,14 @@ export default {
   props: {
     cardNum: {
       type: Number,
-      default: 3
+      default: 3,
     },
     cardWidth: {
       type: Number,
-      default: 260
+      default: 260,
     },
-    slideDistance: {
+    // 滑动阈值
+    slideThreshold: {
       type: Number,
     }
   },
@@ -56,7 +61,7 @@ export default {
   },
   computed: {
     slideDis () {
-      return this.slideDistance ?? Math.floor(this.cardWidth * 2 / 5)
+      return this.slideThreshold ?? Math.floor(this.cardWidth * 2 / 5)
     }
   },
   methods: {
@@ -226,11 +231,17 @@ html, body { margin: 0; padding: 0; }
   overflow: hidden;
 }
 
-.fold-scroll-item {
+.fold-scroll__item {
   position: absolute;
   height: 130px;
   border-radius: 5px;
   transform-origin: left;
+  background-color: #fff;
   will-change: transform;
+}
+
+.fold-scroll__item--opacity {
+  width: 100%;
+  height: 100%;
 }
 </style>

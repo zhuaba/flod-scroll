@@ -1,10 +1,10 @@
 {
-  "name": "my-clip-scroll",
-  "version": "0.1.0",
-  "private": true,
+  "name": "fold-scroll",
+  "version": "0.1.2",
+  "main": "dist/FoldScroll.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --target lib --name FoldScroll src/components/FoldScroll.vue",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
