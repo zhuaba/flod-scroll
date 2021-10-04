@@ -1,7 +1,6 @@
-# fold-scroll
-基于vue2.x的H5横向折叠滑动组件样式实现
-* 支持滑动动态伸缩
-* 支持滑动改变底层卡片透明度
+# fold-scroll-container
+基于vue2.x的H5横向折叠滑动组件容器实现
+* 滑动过程伴随伸缩和透明度变化
 * 支持阈值内滑动复位
 
 
@@ -22,12 +21,23 @@ yarn serve
 
 ### Usage
 ```vue
-<FoldScroll :cardNum="5" :cardWidth="260" :slideDistance="100">
-  <template v-for="(item, idx) in cardList" :slot="idx">
-    <div class="demo-item" :key="idx" :style="{ backgroundColor: getColor(idx) }">
+<fold-scroll
+  :card-num="cardList.length"
+  :card-width="260"
+>
+  <!-- 在不同的 slot 中放入你想展示的内容 -->
+  <template
+    v-for="(item, idx) in cardList"
+    :slot="idx"
+  >
+    <div
+      class="inner-item"
+      :key="`${item.id}-${idx}`"
+    >
+      <div class="inner-item__num">{{ item.id }}</div>
     </div>
   </template>
-</FoldScroll>
+</fold-scroll>
 
 <script>
 import FoldScroll from '~/FoldScroll.vue'
@@ -35,13 +45,7 @@ import FoldScroll from '~/FoldScroll.vue'
 export default {
   data() {
     return {
-      cardList: [{}, {}, {}, {}, {}]
-    }
-  },
-  methods: {
-    getColor(idx) {
-      let color = ['#e0e0e0', '#ffe0e0', '#e0ffe0', '#e0e0ff']
-      return color[idx] ?? this.getColor(idx - 4)
+      cardList: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, {id: 5}]
     }
   }
 }

@@ -25,10 +25,10 @@
 import { move_scale, move_opacity } from '../assets/js/funcs.js'
 import { formatCardData } from '../assets/js/utils.js'
 
-/*
-* (this.cardWidth + 5) 为卡片宽度加 margin-left: 5px
-* 10 + (this.cardWidth + 5) 为再加上初卡片的 margin-left: 10px
-*/
+/**
+ * (this.cardWidth + 5) 为卡片宽度加 margin-left: 5px
+ * 10 + (this.cardWidth + 5) 为再加上初卡片的 margin-left: 10px
+ */
 
 export default {
   name: 'FoldScroll',
